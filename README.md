@@ -69,7 +69,7 @@ This is a Node/Express/MongoDB REST API for food items that integrates with fire
   - Body
 
             {
-            "contacts": []
+                "items": []
             }
 
 ## Add New item [POST /api/items]
