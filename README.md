@@ -15,7 +15,7 @@ This is a Node/Express/MongoDB REST API for food items that integrates with fire
 
 # API Usage & Endpoints
 
-## Register a Users exteneded details [POST /api/users]
+## Register a Users extended details [POST /api/users]
 
 - Request: Add user
 
