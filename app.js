@@ -8,7 +8,7 @@ import config from 'config';
 
 admin.initializeApp({
   credential: admin.credential.cert(config.get('serviceAccount')),
-  databaseURL: 'https://souperheroes-32ce8.firebaseio.com'
+  databaseURL: config.get('databaseURL')
 });
 
 const app = express();
