@@ -21,7 +21,7 @@ router.get('/', auth, async (req, res) => {
 });
 // @route   POST api/users
 // @desc    Add a user ( extended details )
-// @access  Public
+// @access  Private
 router.post(
   '/',
   auth,
