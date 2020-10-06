@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const UserSchema = mongoose.Schema({
   user_uid: {
     type: String,
-    retquired: true
+    required: true
   },
   postcode: {
     type: String,
