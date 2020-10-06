@@ -5,7 +5,7 @@ This is a Node/Express/MongoDB REST API for food items that integrates with fire
 ## Getting Started
 
 ```
-  Create config/default.json file and add your mongoURI and firebase serviceAccount & databaseURL
+  Create .env file and add your mongoURI and firebase serviceAccount & databaseURL
 ```
 
 ```bash
