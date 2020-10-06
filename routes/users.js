@@ -10,9 +10,7 @@ const { body, validationResult } = expressValidator;
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {
-    const user = await User.findOne({ user_uid: req.user.uid }).select(
-      '-password'
-    );
+    const user = await User.findOne({ user_uid: req.user.uid });
     res.json(user);
   } catch (err) {
     console.error(err.message);
