@@ -5,13 +5,29 @@ import Item from '../models/item.js';
 const router = express.Router();
 const { body, validationResult } = expressValidator;
 
-// @route   GET api/ietms
-// @desc    Get logged in user items
+// @route   GET api/items
+// @desc    Get all items
 // @access  Private
 router.get('/', auth, async (req, res) => {
   // res.send('Get all items');
   try {
-    // because we are using auth middle ware we have access to that request - req.user.id
+    const items = await Item.find().sort({
+      date: -1
+    });
+    res.json(items);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   GET api/items
+// @desc    Get logged in user items
+// @access  Private
+router.get('/:user_id', auth, async (req, res) => {
+  // res.send('Get all items');
+  try {
+    // because we are using auth middleware we have access to that request - req.user.id
     const items = await Item.find({ user_uid: req.user.uid }).sort({
       date: -1
     });
@@ -60,7 +76,7 @@ router.post(
 );
 
 // @route   PUT api/items/:id
-// @desc    Update contact
+// @desc    Update item
 // @access  Private
 router.put('/:id', auth, async (req, res) => {
   const { description, expiry } = req.body;
@@ -75,7 +91,7 @@ router.put('/:id', auth, async (req, res) => {
 
     if (!item) return res.status(404).json({ msg: 'Item not found' });
 
-    //Make sure user owns contact
+    //Make sure user owns item
     if (item.user_uid !== req.user.uid) {
       return res.status(401).json({ msg: 'Not authorized' });
     }
@@ -102,7 +118,7 @@ router.delete('/:id', auth, async (req, res) => {
 
     if (!item) return res.status(404).json({ msg: 'Item not found' });
 
-    // Make sure user owns contact
+    // Make sure user owns item
     if (item.user_uid !== req.user.uid) {
       return res.status(401).json({ msg: 'Not authorised' });
     }
