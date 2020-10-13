@@ -5,7 +5,7 @@ import auth from '../middleware/auth.js';
 const router = express.Router();
 const { body, validationResult } = expressValidator;
 
-// @route   GET api/auth
+// @route   GET api/users
 // @desc    Get logged in user
 // @access  Private
 router.get('/', auth, async (req, res) => {
@@ -23,7 +23,7 @@ router.get('/', auth, async (req, res) => {
 router.post(
   '/',
   auth,
-  [body('postcode', 'postcode is required').not().isEmpty()],
+  // [body('postcode', 'postcode is required').not().isEmpty()],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
