@@ -46,7 +46,7 @@ router.post(
 
       await user.save();
 
-      res.json({ msg: 'user extended details created' });
+      res.json(user);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
