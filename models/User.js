@@ -1,9 +1,8 @@
 import mongoose from 'mongoose';
 
 const UserSchema = mongoose.Schema({
-  user_uid: {
-    type: String,
-    required: true
+  _id: {
+    type: String
   },
   postcode: {
     type: String,

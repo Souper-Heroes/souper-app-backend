@@ -10,7 +10,7 @@ const { body, validationResult } = expressValidator;
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {
-    const user = await User.findOne({ user_uid: req.user.uid });
+    const user = await User.findById(req.user.uid);
     res.json(user);
   } catch (err) {
     console.error(err.message);
@@ -33,14 +33,14 @@ router.post(
     const { postcode } = req.body;
 
     try {
-      let user = await User.findOne({ user_uid: req.user.uid });
+      let user = await User.findById(req.user.uid);
 
       if (user) {
         return res.status(400).json({ msg: 'User already exists' });
       }
 
       user = new User({
-        user_uid: req.user.uid,
+        _id: req.user.uid,
         postcode
       });
 
