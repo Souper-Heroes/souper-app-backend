@@ -27,15 +27,8 @@ const ItemSchema = mongoose.Schema({
     required: true
   },
   location: {
-    type: {
-      type: String,
-      enum: ['Point'],
-      required: true
-    },
-    coordinates: {
-      type: [Number],
-      required: true
-    }
+    type: { type: String },
+    coordinates: []
   },
   date: {
     type: Date,

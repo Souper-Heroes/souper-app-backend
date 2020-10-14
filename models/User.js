@@ -17,15 +17,8 @@ const UserSchema = mongoose.Schema({
     required: false
   },
   location: {
-    type: {
-      type: String,
-      enum: ['Point'],
-      required: true
-    },
-    coordinates: {
-      type: [Number],
-      required: true
-    }
+    type: { type: String },
+    coordinates: []
   },
   preferred_distance_unit: {
     type: { type: String },
