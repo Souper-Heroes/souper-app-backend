@@ -21,6 +21,33 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
+// @route   GET api/items/search
+// @desc    Get all items filtered by search params
+// @access  Private
+router.get('/search', auth, async (req, res) => {
+  // const { long, latt, maxDistance } = req.body;
+
+  try {
+    Item.find({
+      location: {
+        $near: {
+          $maxDistance: 4000,
+          $geometry: {
+            type: 'Point',
+            coordinates: [51.57415, 0.18387]
+          }
+        }
+      }
+    }).find((error, results) => {
+      if (error) console.log(error);
+      res.json(results);
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // @route   GET api/items
 // @desc    Get logged in user items
 // @access  Private
