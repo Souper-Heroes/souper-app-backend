@@ -8,6 +8,10 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: false
   },
+  profile_pic: {
+    type: String,
+    required: false
+  },
   postcode: {
     type: String,
     required: false
