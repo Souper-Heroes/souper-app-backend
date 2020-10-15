@@ -12,7 +12,7 @@ router.get('/', auth, async (req, res) => {
   // res.send('Get all items');
   try {
     const items = await Item.find().sort({
-      date: -1
+      date: -1,
     });
     res.json(items);
   } catch (err) {
@@ -34,10 +34,10 @@ router.get('/search', auth, async (req, res) => {
           $maxDistance: 4000,
           $geometry: {
             type: 'Point',
-            coordinates: [51.57415, 0.18387]
-          }
-        }
-      }
+            coordinates: [51.57415, 0.18387],
+          },
+        },
+      },
     }).find((error, results) => {
       if (error) console.log(error);
       res.json(results);
@@ -51,12 +51,26 @@ router.get('/search', auth, async (req, res) => {
 // @route   GET api/items
 // @desc    Get logged in user items
 // @access  Private
-router.get('/:user_id', auth, async (req, res) => {
+router.get('/provider/:user_uid', auth, async (req, res) => {
   // res.send('Get all items');
   try {
     // because we are using auth middleware we have access to that request - req.user.id
     const items = await Item.find({ user_uid: req.user.uid }).sort({
-      date: -1
+      date: -1,
+    });
+    res.json(items);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+router.get('/collector/:c_user_uid', auth, async (req, res) => {
+  // res.send('Get all items');
+  try {
+    // because we are using auth middleware we have access to that request - req.user.id
+    const items = await Item.find({ c_user_uid: req.user.uid }).sort({
+      date: -1,
     });
     res.json(items);
   } catch (err) {
@@ -78,8 +92,8 @@ router.post(
       body('category', 'Category is required').not().isEmpty(),
       body('expiry', 'Expiry is required').not().isEmpty(),
       body('location', 'Location is required').not().isEmpty(),
-      body('availability', 'Availability is required').not().isEmpty()
-    ]
+      body('availability', 'Availability is required').not().isEmpty(),
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -93,7 +107,7 @@ router.post(
       category,
       expiry,
       location,
-      availability
+      availability,
     } = req.body;
 
     try {
@@ -104,7 +118,7 @@ router.post(
         category,
         expiry,
         location,
-        availability
+        availability,
       });
 
       const item = await newItem.save();
@@ -121,12 +135,13 @@ router.post(
 // @desc    Update item
 // @access  Private
 router.put('/:id', auth, async (req, res) => {
-  const { description, expiry } = req.body;
+  const { description, expiry, c_user_uid } = req.body;
 
   // build contact object
   const itemFields = {};
   if (description) itemFields.description = description;
   if (expiry) itemFields.expiry = expiry;
+  if (c_user_uid) itemFields.c_user_uid = c_user_uid;
 
   try {
     let item = await Item.findById(req.params.id);
