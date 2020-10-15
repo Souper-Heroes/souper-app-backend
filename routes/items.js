@@ -77,7 +77,8 @@ router.post(
       body('description', 'Description is required').not().isEmpty(),
       body('category', 'Category is required').not().isEmpty(),
       body('expiry', 'Expiry is required').not().isEmpty(),
-      body('location', 'Location is required').not().isEmpty()
+      body('location', 'Location is required').not().isEmpty(),
+      body('availability', 'Availability is required').not().isEmpty()
     ]
   ],
   async (req, res) => {
@@ -86,7 +87,14 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { title, description, category, expiry, location } = req.body;
+    const {
+      title,
+      description,
+      category,
+      expiry,
+      location,
+      availability
+    } = req.body;
 
     try {
       const newItem = new Item({
@@ -95,7 +103,8 @@ router.post(
         description,
         category,
         expiry,
-        location
+        location,
+        availability
       });
 
       const item = await newItem.save();

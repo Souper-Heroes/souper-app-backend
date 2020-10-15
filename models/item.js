@@ -22,6 +22,10 @@ const ItemSchema = mongoose.Schema({
     type: [String],
     required: true
   },
+  photo: {
+    type: String,
+    required: false
+  },
   expiry: {
     type: Date,
     required: true
@@ -29,6 +33,10 @@ const ItemSchema = mongoose.Schema({
   location: {
     type: { type: String },
     coordinates: []
+  },
+  availability: {
+    type: String,
+    required: true
   },
   date: {
     type: Date,
