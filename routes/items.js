@@ -102,6 +102,7 @@ router.post(
     }
 
     const {
+      c_user_uid,
       title,
       description,
       category,
@@ -113,6 +114,7 @@ router.post(
     try {
       const newItem = new Item({
         user_uid: req.user.uid,
+        c_user_uid,
         title,
         description,
         category,
