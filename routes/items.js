@@ -49,6 +49,24 @@ router.get('/search', auth, async (req, res) => {
 });
 
 // @route   GET api/items
+// @desc    Get all items
+// @access  Private
+router.get('/:user_id', auth, async (req, res) => {
+  // res.send('Get all items');
+  try {
+    const items = await Item.find({
+      $or: [{ user_uid: req.user.uid }, { c_user_uid: req.user.uid }],
+    }).sort({
+      date: -1,
+    });
+    res.json(items);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   GET api/items
 // @desc    Get logged in user items
 // @access  Private
 router.get('/provider/:user_uid', auth, async (req, res) => {
@@ -144,6 +162,7 @@ router.put('/:id', auth, async (req, res) => {
   if (description) itemFields.description = description;
   if (expiry) itemFields.expiry = expiry;
   if (c_user_uid) itemFields.c_user_uid = c_user_uid;
+  // if (user_uid) itemFields.c_user_uid = user_uid;
 
   try {
     let item = await Item.findById(req.params.id);
