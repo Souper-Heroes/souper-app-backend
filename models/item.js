@@ -4,44 +4,48 @@ const ItemSchema = mongoose.Schema({
   user_uid: {
     type: String,
     ref: 'users',
-    required: true
+    required: true,
   },
   c_user_uid: {
     type: String,
-    ref: 'users'
+    ref: 'users',
   },
   title: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   category: {
     type: [String],
-    required: true
+    required: true,
   },
   photo: {
     type: String,
-    required: false
+    required: false,
   },
   expiry: {
     type: Date,
-    required: true
+    required: true,
+  },
+  postcode: {
+    type: String,
+    required: false,
   },
   location: {
     type: { type: String },
-    coordinates: []
+    coordinates: [],
   },
   availability: {
     type: String,
-    required: true
+    required: true,
   },
   date: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 ItemSchema.index({ location: '2dsphere' });
