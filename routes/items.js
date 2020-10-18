@@ -109,6 +109,7 @@ router.post(
       body('description', 'Description is required').not().isEmpty(),
       body('category', 'Category is required').not().isEmpty(),
       body('expiry', 'Expiry is required').not().isEmpty(),
+      body('postcode', 'Postcode is required').not().isEmpty(),
       body('location', 'Location is required').not().isEmpty(),
       body('availability', 'Availability is required').not().isEmpty(),
     ],
@@ -125,6 +126,7 @@ router.post(
       description,
       category,
       expiry,
+      postcode,
       location,
       availability,
     } = req.body;
@@ -137,6 +139,7 @@ router.post(
         description,
         category,
         expiry,
+        postcode,
         location,
         availability,
       });
@@ -155,13 +158,14 @@ router.post(
 // @desc    Update item
 // @access  Private
 router.put('/:id', auth, async (req, res) => {
-  const { description, expiry, c_user_uid } = req.body;
+  const { description, expiry, c_user_uid, postcode } = req.body;
 
   // build contact object
   const itemFields = {};
   if (description) itemFields.description = description;
   if (expiry) itemFields.expiry = expiry;
   if (c_user_uid) itemFields.c_user_uid = c_user_uid;
+  if (postcode) itemFields.postcode = postcode;
   // if (user_uid) itemFields.c_user_uid = user_uid;
 
   try {
