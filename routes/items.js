@@ -168,6 +168,83 @@ router.put('/:id', auth, async (req, res) => {
   }
 });
 
+// @route   PUT api/reserve/:id
+// @desc    Reserve item
+// @access  Private
+router.put('/reserve/:id', auth, async (req, res) => {
+  //const { description, expiry, c_user_uid } = req.body;
+
+  // build contact object
+  //const itemFields = {};
+  //if (description) itemFields.description = description;
+  //if (expiry) itemFields.expiry = expiry;
+  //if (req.user.uid) itemFields.c_user_uid = req.user.uid;
+
+  try {
+    let item = await Item.findById(req.params.id);
+
+    if (!item) return res.status(404).json({ msg: 'Item not found' });
+
+    //Make sure item not already reserved by someone else
+    //req.user.uid
+    if (item.c_user_uid !== null) {
+      return res.status(401).json({ msg: 'Item aleady reserved' });
+    }
+
+    item = await Item.findByIdAndUpdate(
+      req.params.id,
+      { $set: itemFields },
+      { new: true } // TODO what should this be set to ?
+    );
+
+    res.json(item);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   PUT api/unreserve/:id
+// @desc    Unreserve item
+// @access  Private
+router.put('/unreserve/:id', auth, async (req, res) => {
+  try {
+    //const itemFields = {};
+    //if (req.user.uid) itemFields.c_user_uid = null;
+
+    //console.log('UNRESERVE params:');
+    //console.log('UNRESERVE params:', req.params);
+
+    let item = await Item.findById(req.params.id);
+
+    if (!item) return res.status(404).json({ msg: 'Item not found' });
+
+    //console.log('MY ITEM:', item);
+
+    //Make sure item not already reserved by someone else
+    //req.user.uid
+    if (item.c_user_uid === null) {
+      return res.status(401).json({ msg: 'Item already unreserved' });
+    }
+
+    if (item.c_user_uid !== req.user.uid) {
+      return res.status(402).json({ msg: 'Not Authorized' });
+    }
+
+    item.c_user_uid = null;
+    item = await Item.findByIdAndUpdate(
+      req.params.id,
+      { $set: item },
+      { new: true } // TODO what should this be set to ?
+    );
+
+    res.json(item);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // @route   DELETE api/items/:id
 // @desc    Delete item
 // @access  Private
