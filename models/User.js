@@ -25,12 +25,12 @@ const UserSchema = mongoose.Schema({
     coordinates: []
   },
   preferred_distance_unit: {
-    type: { type: String },
-    coordinates: []
+    type: String,
+    required: false
   },
   preferred_distance: {
-    type: { type: Number },
-    coordinates: []
+    type: Number,
+    required: false
   },
   date: {
     type: Date,
