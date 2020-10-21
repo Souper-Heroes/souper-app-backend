@@ -258,7 +258,7 @@ router.put('/unreserve/:id', auth, async (req, res) => {
     item = await Item.findByIdAndUpdate(
       req.params.id,
       { $set: item },
-      { new: true } // TODO what should this be set to ?
+      { new: true }
     );
 
     res.json(item);

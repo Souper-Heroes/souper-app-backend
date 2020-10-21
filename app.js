@@ -11,7 +11,8 @@ const {
   FIREBASE_PROJECT_ID,
   FIREBASE_PRIVATE_KEY,
   FIREBASE_CLIENT_EMAIL,
-  FIREBASE_DATABASE_URL
+  FIREBASE_DATABASE_URL,
+  REACT_APP_GOOGLE_MAPS_API_KEY
 } = process.env;
 
 admin.initializeApp({
@@ -20,7 +21,8 @@ admin.initializeApp({
     private_key: FIREBASE_PRIVATE_KEY,
     client_email: FIREBASE_CLIENT_EMAIL
   }),
-  databaseURL: FIREBASE_DATABASE_URL
+  databaseURL: FIREBASE_DATABASE_URL,
+  google_maps_api_key: REACT_APP_GOOGLE_MAPS_API_KEY
 });
 
 const app = express();
