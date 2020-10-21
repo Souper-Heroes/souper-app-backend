@@ -30,7 +30,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { postcode } = req.body;
+    const { postcode, displayName, photoURL } = req.body;
 
     try {
       let user = await User.findById(req.user.uid);
@@ -41,7 +41,9 @@ router.post(
 
       user = new User({
         _id: req.user.uid,
-        postcode
+        postcode,
+        display_name: displayName,
+        profile_pic: photoURL
       });
 
       await user.save();
