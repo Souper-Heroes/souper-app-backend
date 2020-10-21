@@ -299,9 +299,8 @@ router.delete('/:id', auth, async (req, res) => {
 // @access  Private
 router.delete('/expired/:id', auth, async (req, res) => {
   try {
-    //const today = moment().startOfDay('day');
     var today = moment(new Date()).format('YYYY-MM-DD[T00:00:00.000Z]');
-    console.log("Deleting items less than today:", today, "userId:", req.user.uid);
+    // console.log("Deleting items less than today:", today, "userId:", req.user.uid);
 
     await Item.deleteMany({
       c_user_uid: req.user.uid,
