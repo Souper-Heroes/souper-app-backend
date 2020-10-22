@@ -309,7 +309,7 @@ router.delete('/expired/:id', auth, async (req, res) => {
       },
     })
 
-    res.json({ msg: 'Expired items removed' });
+    res.json({ msg: 'Expired items removed for user' });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
