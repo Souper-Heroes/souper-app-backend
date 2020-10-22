@@ -14,7 +14,7 @@ router.get('/', auth, async (req, res) => {
   // res.send('Get all items');
   try {
     const items = await Item.find().sort({
-      date: -1,
+      date: -1
     });
     res.json(items);
   } catch (err) {
@@ -26,24 +26,38 @@ router.get('/', auth, async (req, res) => {
 // @route   GET api/items/search
 // @desc    Get all items filtered by search params
 // @access  Private
-router.get('/search', auth, async (req, res) => {
-  // const { long, latt, maxDistance } = req.body;
 
+router.get('/search', auth, async (req, res) => {
+  const { lat, long, maxDistance } = req.query;
+  // console.log(req.query);
   try {
-    Item.find({
+    const match = {};
+    const sort = {};
+
+    // Query to make.
+    const query = {
       location: {
         $near: {
-          $maxDistance: 4000,
+          $maxDistance: maxDistance,
           $geometry: {
             type: 'Point',
-            coordinates: [51.57415, 0.18387],
-          },
-        },
+            coordinates: [lat, long]
+          }
+        }
       },
-    }).find((error, results) => {
-      if (error) console.log(error);
-      res.json(results);
-    });
+      ...match
+    };
+
+    // Pagination and Sorting
+    const options = {
+      limit: 0, // parseInt(req.query.limit),
+      skip: 0, // parseInt(req.query.skip),
+      sort
+    };
+
+    const items = await Item.find(query, undefined, options).lean().exec();
+
+    res.json(items);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -57,9 +71,9 @@ router.get('/:user_id', auth, async (req, res) => {
   // res.send('Get all items');
   try {
     const items = await Item.find({
-      $or: [{ user_uid: req.user.uid }, { c_user_uid: req.user.uid }],
+      $or: [{ user_uid: req.user.uid }, { c_user_uid: req.user.uid }]
     }).sort({
-      date: -1,
+      date: -1
     });
     res.json(items);
   } catch (err) {
@@ -76,7 +90,7 @@ router.get('/provider/:user_uid', auth, async (req, res) => {
   try {
     // because we are using auth middleware we have access to that request - req.user.id
     const items = await Item.find({ user_uid: req.user.uid }).sort({
-      date: -1,
+      date: -1
     });
     res.json(items);
   } catch (err) {
@@ -90,7 +104,7 @@ router.get('/collector/:c_user_uid', auth, async (req, res) => {
   try {
     // because we are using auth middleware we have access to that request - req.user.id
     const items = await Item.find({ c_user_uid: req.user.uid }).sort({
-      date: -1,
+      date: -1
     });
     res.json(items);
   } catch (err) {
@@ -113,8 +127,8 @@ router.post(
       body('expiry', 'Expiry is required').not().isEmpty(),
       body('postcode', 'Postcode is required').not().isEmpty(),
       body('location', 'Location is required').not().isEmpty(),
-      body('availability', 'Availability is required').not().isEmpty(),
-    ],
+      body('availability', 'Availability is required').not().isEmpty()
+    ]
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -130,7 +144,7 @@ router.post(
       expiry,
       postcode,
       location,
-      availability,
+      availability
     } = req.body;
 
     try {
@@ -143,7 +157,7 @@ router.post(
         expiry,
         postcode,
         location,
-        availability,
+        availability
       });
 
       const item = await newItem.save();
