@@ -56,4 +56,35 @@ router.post(
   }
 );
 
+// @route   PUT api/users
+// @desc    Update a user profile
+// @access  Private
+router.put('/', auth, async (req, res) => {
+    const { display_name, profile_pic, postcode, address, location, preferred_distance_unit, preferred_distance } = req.body;
+
+    const profile = {};
+    if (display_name) profile.display_name = display_name;
+    if (profile_pic) profile.profile_pic = profile_pic;
+    if (postcode) profile.postcode = postcode;
+    if (address) profile.address = address;
+    if (location && location.lat && location.lng) profile.location = { type: 'Point', coordinates: [location.lat, location.lng]};
+    if (preferred_distance_unit) profile.preferred_distance_unit = preferred_distance_unit;
+    if (preferred_distance) profile.preferred_distance = preferred_distance;
+
+    try {
+        let user = await User.findById(req.user.uid);
+        if (!user) return res.status(404).json({ msg: 'User not found' });
+        user = await User.findByIdAndUpdate(
+            req.user.uid,
+            { $set: profile },
+            { new: false }
+        );
+
+        res.json(user);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
 export default router;
