@@ -2,6 +2,8 @@ import express from 'express';
 import expressValidator from 'express-validator';
 import auth from '../middleware/auth.js';
 import Item from '../models/item.js';
+import moment from 'moment';
+
 const router = express.Router();
 const { body, validationResult } = expressValidator;
 
@@ -228,10 +230,11 @@ router.put('/reserve/:id', auth, async (req, res) => {
       return res.status(401).json({ msg: 'Item aleady reserved' });
     }
 
+    item.c_user_uid = req.params.id;
     item = await Item.findByIdAndUpdate(
       req.params.id,
-      { $set: itemFields },
-      { new: true } // TODO what should this be set to ?
+      { $set: item },
+      { new: true }
     );
 
     res.json(item);
@@ -272,7 +275,7 @@ router.put('/unreserve/:id', auth, async (req, res) => {
     item = await Item.findByIdAndUpdate(
       req.params.id,
       { $set: item },
-      { new: true } // TODO what should this be set to ?
+      { new: true }
     );
 
     res.json(item);
@@ -299,6 +302,29 @@ router.delete('/:id', auth, async (req, res) => {
     await Item.findByIdAndRemove(req.params.id);
 
     res.json({ msg: 'Item removed' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+// @route   DELETE api/items/expired
+// @desc    Delete expired items for user
+// @access  Private
+router.delete('/expired/:id', auth, async (req, res) => {
+  try {
+    var today = moment(new Date()).format('YYYY-MM-DD[T00:00:00.000Z]');
+    // console.log("Deleting items less than today:", today, "userId:", req.user.uid);
+
+    await Item.deleteMany({
+      c_user_uid: req.user.uid,
+      expiry: {
+        $lt: new Date(today)
+      },
+    })
+
+    res.json({ msg: 'Expired items removed for user' });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
