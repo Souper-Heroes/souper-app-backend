@@ -222,7 +222,7 @@ router.put('/reserve/:id', auth, async (req, res) => {
       return res.status(401).json({ msg: 'Item aleady reserved' });
     }
 
-    item.c_user_uid = req.params.id;
+    item.c_user_uid = req.user.uid;
     item = await Item.findByIdAndUpdate(
       req.params.id,
       { $set: item },
