@@ -70,7 +70,7 @@ router.put('/', auth, async (req, res) => {
         if (profile_pic) user.profile_pic = profile_pic;
         if (postcode) user.postcode = postcode;
         if (address) user.address = address;
-        if (location && location.lat && location.lng) user.location = { type: 'Point', coordinates: [location.lat, location.lng]};
+        if (location && location.lat && location.lng) user.location = { type: 'Point', coordinates: [location.lng, location.lat]};
         if (preferred_distance_unit) user.preferred_distance_unit = preferred_distance_unit;
         if (preferred_distance) user.preferred_distance = preferred_distance;
 
