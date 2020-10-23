@@ -174,7 +174,15 @@ router.post(
 // @desc    Update item
 // @access  Private
 router.put('/:id', auth, async (req, res) => {
-  const { description, expiry, c_user_uid, postcode } = req.body;
+  const {
+    description,
+    expiry,
+    c_user_uid,
+    postcode,
+    category,
+    availability,
+    title
+  } = req.body;
 
   // build contact object
   const itemFields = {};
@@ -182,6 +190,10 @@ router.put('/:id', auth, async (req, res) => {
   if (expiry) itemFields.expiry = expiry;
   if (c_user_uid) itemFields.c_user_uid = c_user_uid;
   if (postcode) itemFields.postcode = postcode;
+  if (category) itemFields.category = category;
+  if (availability) itemFields.availability = availability;
+  if (title) itemFields.title = title;
+
   // if (user_uid) itemFields.c_user_uid = user_uid;
 
   try {
@@ -241,7 +253,6 @@ router.put('/reserve/:id', auth, async (req, res) => {
 // @access  Private
 router.put('/unreserve/:id', auth, async (req, res) => {
   try {
-
     let item = await Item.findById(req.params.id);
 
     if (!item) return res.status(404).json({ msg: 'Item not found' });
@@ -292,7 +303,6 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-
 // @route   DELETE api/items/expired
 // @desc    Delete expired items for user
 // @access  Private
@@ -305,8 +315,8 @@ router.delete('/expired/:id', auth, async (req, res) => {
       c_user_uid: req.user.uid,
       expiry: {
         $lt: new Date(today)
-      },
-    })
+      }
+    });
 
     res.json({ msg: 'Expired items removed for user' });
   } catch (err) {
