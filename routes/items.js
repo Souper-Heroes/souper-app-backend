@@ -31,31 +31,28 @@ router.get('/search', auth, async (req, res) => {
   const { lat, long, maxDistance } = req.query;
   // console.log(req.query);
   try {
-    const match = {};
+    // const query = { availability: 'anytime between 9 - 5' };
+    const query = {};
     const sort = {};
-
-    // Query to make.
-    const query = {
-      location: {
-        $near: {
-          $maxDistance: maxDistance,
-          $geometry: {
-            type: 'Point',
-            coordinates: [lat, long]
-          }
-        }
-      },
-      ...match
+    const geoSpatialQuery = {
+      $geoNear: {
+        near: {
+          type: 'Point',
+          coordinates: [Number(long), Number(lat)]
+        },
+        distanceField: 'distance',
+        maxDistance: Number(maxDistance),
+        query,
+        spherical: true
+      }
     };
 
-    // Pagination and Sorting
-    const options = {
-      limit: 0, // parseInt(req.query.limit),
-      skip: 0, // parseInt(req.query.skip),
-      sort
-    };
-
-    const items = await Item.find(query, undefined, options).lean().exec();
+    const items = await Item.aggregate([
+      geoSpatialQuery,
+      { $limit: 1000 },
+      { $skip: 0 },
+      { $sort: { distance: -1, ...sort } }
+    ]).exec();
 
     res.json(items);
   } catch (err) {
