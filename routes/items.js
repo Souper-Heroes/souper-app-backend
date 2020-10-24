@@ -51,7 +51,17 @@ router.get('/search', auth, async (req, res) => {
       geoSpatialQuery,
       { $limit: 1000 },
       { $skip: 0 },
-      { $sort: { distance: -1, ...sort } }
+      { $sort: { distance: -1, ...sort } },
+      {
+        $facet: {
+          paginatedResults: [{ $skip: 0 }, { $limit: 3 }],
+          totalCount: [
+            {
+              $count: 'count'
+            }
+          ]
+        }
+      }
     ]).exec();
 
     res.json(items);
