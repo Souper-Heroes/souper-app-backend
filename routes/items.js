@@ -28,8 +28,8 @@ router.get('/', auth, async (req, res) => {
 // @access  Private
 
 router.get('/search', auth, async (req, res) => {
-  const { lat, long, maxDistance } = req.query;
-  // console.log(req.query);
+  const { lat, long, maxDistance, sortBy } = req.query;
+  console.log(req.query);
   try {
     const query = { c_user_uid: null };
     const sort = {};
@@ -50,7 +50,7 @@ router.get('/search', auth, async (req, res) => {
       geoSpatialQuery,
       { $limit: 1000 },
       { $skip: 0 },
-      { $sort: { distance: -1, ...sort } }
+      { $sort: { distance: Number(sortBy), ...sort } }
       // {
       //   $facet: {
       //     paginatedResults: [{ $skip: 0 }, { $limit: 1000 }],
