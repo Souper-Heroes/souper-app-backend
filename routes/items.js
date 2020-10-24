@@ -54,7 +54,7 @@ router.get('/search', auth, async (req, res) => {
       { $sort: { distance: -1, ...sort } },
       {
         $facet: {
-          paginatedResults: [{ $skip: 0 }, { $limit: 3 }],
+          paginatedResults: [{ $skip: 0 }, { $limit: 1000 }],
           totalCount: [
             {
               $count: 'count'
