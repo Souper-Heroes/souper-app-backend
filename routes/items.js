@@ -31,8 +31,7 @@ router.get('/search', auth, async (req, res) => {
   const { lat, long, maxDistance } = req.query;
   // console.log(req.query);
   try {
-    // const query = { availability: 'anytime between 9 - 5' };
-    const query = {};
+    const query = { c_user_uid: null };
     const sort = {};
     const geoSpatialQuery = {
       $geoNear: {
