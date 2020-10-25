@@ -20,7 +20,7 @@ const ItemSchema = mongoose.Schema({
   },
   category: {
     type: [String],
-    required: true,
+    required: false,
   },
   photo: {
     type: String,
