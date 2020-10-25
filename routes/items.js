@@ -123,7 +123,7 @@ router.post(
     [
       body('title', 'Title is required').not().isEmpty(),
       body('description', 'Description is required').not().isEmpty(),
-      body('category', 'Category is required').not().isEmpty(),
+      body('category'),
       body('expiry', 'Expiry is required').not().isEmpty(),
       body('postcode', 'Postcode is required').not().isEmpty(),
       body('location', 'Location is required').not().isEmpty(),
