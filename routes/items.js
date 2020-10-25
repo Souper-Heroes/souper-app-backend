@@ -28,14 +28,13 @@ router.get('/', auth, async (req, res) => {
 // @access  Private
 
 router.get('/search', auth, async (req, res) => {
-  const { lat, long, maxDistance, category, expiry } = req.query;
-
+  const { lat, long, maxDistance, category, expiry, sortBy } = req.query;
+  console.log(JSON.parse(sortBy));
   try {
     const query = { c_user_uid: null };
     category && category.length ? (query.category = { $in: category }) : '';
     expiry && expiry.length ? (query.expiry = { $gte: new Date(expiry) }) : '';
 
-    const sort = {};
     const geoSpatialQuery = {
       $geoNear: {
         near: {
@@ -51,7 +50,7 @@ router.get('/search', auth, async (req, res) => {
 
     const items = await Item.aggregate([
       geoSpatialQuery,
-      { $sort: { distance: 1, ...sort } },
+      { $sort: sortBy.length ? JSON.parse(sortBy) : { distance: 1 } },
       {
         $facet: {
           paginatedResults: [{ $skip: 0 }, { $limit: 1000 }],
