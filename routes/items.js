@@ -28,12 +28,12 @@ router.get('/', auth, async (req, res) => {
 // @access  Private
 
 router.get('/search', auth, async (req, res) => {
-  const { lat, long, maxDistance, category } = req.query;
-  console.log(req.query);
+  const { lat, long, maxDistance, category, expiry } = req.query;
+
   try {
     const query = { c_user_uid: null };
     category && category.length ? (query.category = { $in: category }) : '';
-    console.log(query);
+    expiry && expiry.length ? (query.expiry = { $gte: new Date(expiry) }) : '';
 
     const sort = {};
     const geoSpatialQuery = {
