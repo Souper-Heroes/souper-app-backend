@@ -28,10 +28,13 @@ router.get('/', auth, async (req, res) => {
 // @access  Private
 
 router.get('/search', auth, async (req, res) => {
-  const { lat, long, maxDistance, sortBy } = req.query;
+  const { lat, long, maxDistance, category } = req.query;
   console.log(req.query);
   try {
     const query = { c_user_uid: null };
+    category && category.length ? (query.category = { $in: category }) : '';
+    console.log(query);
+
     const sort = {};
     const geoSpatialQuery = {
       $geoNear: {
@@ -50,7 +53,7 @@ router.get('/search', auth, async (req, res) => {
       geoSpatialQuery,
       { $limit: 1000 },
       { $skip: 0 },
-      { $sort: { distance: Number(sortBy), ...sort } }
+      { $sort: { distance: 1, ...sort } }
       // {
       //   $facet: {
       //     paginatedResults: [{ $skip: 0 }, { $limit: 1000 }],
