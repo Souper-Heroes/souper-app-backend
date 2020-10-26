@@ -184,7 +184,7 @@ This is a Node/Express/MongoDB REST API for food items that integrates with fire
             "item": {}
           }
 
-## Delete expired item [DELETE /api/items/expired/:id]
+## Delete expired items [DELETE /api/items/expired/:id]
 
 - Request: Delete expired items for user
 
