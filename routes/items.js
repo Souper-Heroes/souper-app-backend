@@ -38,7 +38,7 @@ router.get('/search', auth, async (req, res) => {
     limit,
     page
   } = req.query;
-  // console.log(JSON.parse(sortBy));
+
   try {
     const query = { c_user_uid: null };
     category && category.length ? (query.category = { $in: category }) : '';
@@ -52,22 +52,17 @@ router.get('/search', auth, async (req, res) => {
         },
         distanceField: 'distance',
         maxDistance: Number(maxDistance),
-        // query,
+        query,
         spherical: true
       }
     };
 
     const items = await Item.aggregate([
       geoSpatialQuery,
-      // { $sort: sortBy.length ? JSON.parse(sortBy) : { distance: 1 } },
+      { $sort: sortBy.length ? JSON.parse(sortBy) : { distance: 1 } },
       {
         $facet: {
-          paginatedResults: [
-            { $sort: sortBy.length ? JSON.parse(sortBy) : { distance: 1 } },
-            { $match: query },
-            { $skip: 0 },
-            { $limit: 1000 }
-          ],
+          paginatedResults: [{ $skip: 0 }, { $limit: 1000 }],
           totalCount: [
             {
               $count: 'count'
