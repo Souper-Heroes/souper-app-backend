@@ -102,7 +102,7 @@ This is a Node/Express/MongoDB REST API for food items that integrates with fire
 
   - Parameters
 
-    - id: 1 (number) - An unique identifier of the item.
+    - id: 1 (string) - An unique identifier of the item.
 
   - Headers
 
@@ -130,7 +130,7 @@ This is a Node/Express/MongoDB REST API for food items that integrates with fire
 
   - Parameters
 
-    - id: 1 (number) - An unique identifier of the item.
+    - id: 1 (string) - An unique identifier of the item.
 
   - Headers
 
@@ -142,4 +142,64 @@ This is a Node/Express/MongoDB REST API for food items that integrates with fire
 
           {
             "msg": "item removed"
+          }
+
+## Reserve item [PUT /api/items/reserve/:id]
+
+- Request: Reserve an item
+
+  - Parameters
+
+    - id: 1 (string) - An unique identifier of the item.
+
+  - Headers
+
+        x-auth-token: YOURFIREBASEJWT
+
+* Response: 200 (application/json)
+
+  - Body
+
+          {
+            "item": {}
+          }
+
+## Unreserve item [PUT /api/items/unreserve/:id]
+
+- Request: Unreserve an item
+
+  - Parameters
+
+    - id: 1 (string) - An unique identifier of the item.
+
+  - Headers
+
+        x-auth-token: YOURFIREBASEJWT
+
+* Response: 200 (application/json)
+
+  - Body
+
+          {
+            "item": {}
+          }
+
+## Delete expired items [DELETE /api/items/expired/:id]
+
+- Request: Delete expired items for user
+
+  - Parameters
+
+    - id: 1 (string) - An unique identifier of the user_uid.
+
+  - Headers
+
+        x-auth-token: YOURFIREBASEJWT
+
+* Response: 200 (application/json)
+
+  - Body
+
+          {
+            "msg": "Expired items removed for user"
           }
