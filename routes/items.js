@@ -43,7 +43,7 @@ router.get('/search', auth, async (req, res) => {
     const query = { c_user_uid: null };
     category && category.length ? (query.category = { $in: category }) : '';
     expiry && expiry.length ? (query.expiry = { $gte: new Date(expiry) }) : '';
-
+    const skipDocuments = (page - 1) * 6;
     const geoSpatialQuery = {
       $geoNear: {
         near: {
@@ -62,7 +62,10 @@ router.get('/search', auth, async (req, res) => {
       { $sort: sortBy.length ? JSON.parse(sortBy) : { distance: 1 } },
       {
         $facet: {
-          paginatedResults: [{ $skip: 0 }, { $limit: 1000 }],
+          paginatedResults: [
+            { $skip: Number(skipDocuments) },
+            { $limit: Number(limit) }
+          ],
           totalCount: [
             {
               $count: 'count'
