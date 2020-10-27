@@ -28,34 +28,52 @@ router.get('/', auth, async (req, res) => {
 // @access  Private
 
 router.get('/search', auth, async (req, res) => {
-  const { lat, long, maxDistance } = req.query;
-  // console.log(req.query);
+  const {
+    lat,
+    long,
+    maxDistance,
+    category,
+    expiry,
+    sortBy,
+    limit,
+    page
+  } = req.query;
+
   try {
-    const match = {};
-    const sort = {};
+    const query = { c_user_uid: null };
+    category && category.length ? (query.category = { $in: category }) : '';
+    expiry && expiry.length ? (query.expiry = { $gte: new Date(expiry) }) : '';
+    const skipDocuments = (page - 1) * 6;
+    const geoSpatialQuery = {
+      $geoNear: {
+        near: {
+          type: 'Point',
+          coordinates: [Number(long), Number(lat)]
+        },
+        distanceField: 'distance',
+        maxDistance: Number(maxDistance),
+        query,
+        spherical: true
+      }
+    };
 
-    // Query to make.
-    const query = {
-      location: {
-        $near: {
-          $maxDistance: maxDistance,
-          $geometry: {
-            type: 'Point',
-            coordinates: [lat, long]
-          }
+    const items = await Item.aggregate([
+      geoSpatialQuery,
+      { $sort: sortBy.length ? JSON.parse(sortBy) : { distance: 1 } },
+      {
+        $facet: {
+          paginatedResults: [
+            { $skip: Number(skipDocuments) },
+            { $limit: Number(limit) }
+          ],
+          totalCount: [
+            {
+              $count: 'count'
+            }
+          ]
         }
-      },
-      ...match
-    };
-
-    // Pagination and Sorting
-    const options = {
-      limit: 0, // parseInt(req.query.limit),
-      skip: 0, // parseInt(req.query.skip),
-      sort
-    };
-
-    const items = await Item.find(query, undefined, options).lean().exec();
+      }
+    ]).exec();
 
     res.json(items);
   } catch (err) {

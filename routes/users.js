@@ -60,26 +60,39 @@ router.post(
 // @desc    Update a user profile
 // @access  Private
 router.put('/', auth, async (req, res) => {
-    const { display_name, profile_pic, postcode, address, location, preferred_distance_unit, preferred_distance } = req.body;
+  const {
+    display_name,
+    profile_pic,
+    postcode,
+    address,
+    location,
+    preferred_distance_unit,
+    preferred_distance
+  } = req.body;
 
-    try {
-        let user = await User.findById(req.user.uid);
-        if (!user) return res.status(404).json({ msg: 'User not found' });
+  try {
+    let user = await User.findById(req.user.uid);
+    if (!user) return res.status(404).json({ msg: 'User not found' });
 
-        if (display_name) user.display_name = display_name;
-        if (profile_pic) user.profile_pic = profile_pic;
-        if (postcode) user.postcode = postcode;
-        if (address) user.address = address;
-        if (location && location.lat && location.lng) user.location = { type: 'Point', coordinates: [location.lng, location.lat]};
-        if (preferred_distance_unit) user.preferred_distance_unit = preferred_distance_unit;
-        if (preferred_distance) user.preferred_distance = preferred_distance;
+    if (display_name) user.display_name = display_name;
+    if (profile_pic) user.profile_pic = profile_pic;
+    if (postcode) user.postcode = postcode;
+    if (address) user.address = address;
+    if (location && location.lat && location.lng)
+      user.location = {
+        type: 'Point',
+        coordinates: [location.lng, location.lat]
+      };
+    if (preferred_distance_unit)
+      user.preferred_distance_unit = preferred_distance_unit;
+    if (preferred_distance) user.preferred_distance = preferred_distance;
 
-        await user.save();
-        res.json(user);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
+    await user.save();
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
 });
 
 export default router;
