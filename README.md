@@ -2,16 +2,50 @@
 
 This is a Node/Express/MongoDB REST API for food items that integrates with firebase authentication . All item endpoints are protected and each registered firebase user has their own items.
 
-## Getting Started
+## Factsheet
 
+| **Category**              | **Value**                                 |
+| ------------------------- | ---------------------------------------- |
+| **Contact**               | @Andystyles30, @cavalost, @abinormal, @mcblueglade, 
+| **Language / Framework**  | Node / Express
+| **Deployment type**       | Heroku
+| **Production URL**     | [https://souper-app-backend.herokuapp.com](https://souper-app-backend.herokuapp.com)|
+
+## Configuration
+
+Configuration is via the following environment variables:
+
+| Env var      | Example      | Purpose                   |
+| ------------ | ------------ | ------------------------- |
+| `PORT` | `5000` | Port - local environment |
+| `MONGO_URI` | `mongodb+srv://<username>:<password>@uri/db` | CRUD operations
+| `MONGO_DB_NAME` | `-` | MongoDB database name |
+| `FIREBASE_PRIVATE_KEY` | `-` | 
+| `FIREBASE_CLIENT_EMAIL` | `-` |
+| `FIREBASE_PROJECT_ID` | `-` |
+| `FIREBASE_DATABASE_URL` | `-` |
+
+## Requirements
+Node >= 8
+
+## Project setup
 ```
-  Create .env file in root and add your MONGO_URI, FIREBASE_CLIENT_EMAIL, FIREBASE_PROJECT_ID, FIREBASE_DATABASE_URL, FIREBASE_DATABASE_URL variables.
+npm install
 ```
 
-```bash
-  npm install
-  npm run dev-start # Runs on http://localhost:5000
+### Compiles and hot-reloads for development
 ```
+npm run dev-start
+```
+
+### Compiles and runs the server
+```
+npm run start
+```
+
+### Deploy to Heroku
+Link the repository to Heroku, create a heroku/nodejs Buildpack, setup the environment variables and perform a commit + push to main to start the deployment
+
 
 # API Usage & Endpoints
 
@@ -27,17 +61,19 @@ This is a Node/Express/MongoDB REST API for food items that integrates with fire
   - Body
 
             {
-              "postcode": ""
+              "postcode" = "",
+              "display_name" = "",
+              "profile_pic" = ""
             }
 
 - Response: 200 (application/json)
 
-  - Body
-
-            {
-                "msg": "user extended details created"
-            }
-
+    - Body
+    
+              {
+                "user": {}
+              }
+              
 ## Get Logged In User [GET /api/users]
 
 - Request: Get logged in user extended details
@@ -51,9 +87,7 @@ This is a Node/Express/MongoDB REST API for food items that integrates with fire
   - Body
 
             {
-                "user_uid": "",
-                "postcode": "",
-                "date": ""
+                "user_uid": ""
             }
 
 ## Get Items [GET /api/items]
@@ -84,8 +118,13 @@ This is a Node/Express/MongoDB REST API for food items that integrates with fire
   - Body
 
         {
+            "title": "",
             "description" : "",
-            "expiry" : ""
+            "category": [],
+            "expiry" : "",
+            "postcode": "",
+            "location": {},
+            "availability": ""
         }
 
 - Response: 200 (application/json)
@@ -114,8 +153,13 @@ This is a Node/Express/MongoDB REST API for food items that integrates with fire
         {
             "description": "",
             "expiry": "",
+            "c_user_uid": "",
+            "postcode", "",
+            "category": [],
+            "availability": "",
+            "title": ""
         }
-
+        
 - Response: 200 (application/json)
 
   - Body
