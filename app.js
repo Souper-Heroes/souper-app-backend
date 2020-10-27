@@ -11,7 +11,8 @@ const {
   FIREBASE_PROJECT_ID,
   FIREBASE_PRIVATE_KEY,
   FIREBASE_CLIENT_EMAIL,
-  FIREBASE_DATABASE_URL
+  FIREBASE_DATABASE_URL,
+  PORT = 5000
 } = process.env;
 
 admin.initializeApp({
@@ -35,8 +36,6 @@ app.use(express.json({ extended: false, limit: '50mb' }));
 app.get('/', (req, res) =>
   res.json({ msg: 'Welcome to the souper heroes api' })
 );
-
-const PORT = process.env.PORT || 5000;
 
 // Define Routes
 app.use('/api/users', users);
