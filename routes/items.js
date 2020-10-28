@@ -40,7 +40,7 @@ router.get('/search', auth, async (req, res) => {
   } = req.query;
 
   try {
-    const query = { c_user_uid: null };
+    const query = { c_user_uid: null, user_uid: { $ne: req.user.uid } };
     category && category.length ? (query.category = { $in: category }) : '';
     expiry && expiry.length ? (query.expiry = { $gte: new Date(expiry) }) : '';
     const skipDocuments = (page - 1) * limit;
