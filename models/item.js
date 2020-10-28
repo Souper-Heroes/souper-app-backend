@@ -34,6 +34,10 @@ const ItemSchema = mongoose.Schema({
     type: String,
     required: false,
   },
+  address: {
+    type: String,
+    required: false,
+  },
   location: {
     type: { type: String },
     coordinates: [],
