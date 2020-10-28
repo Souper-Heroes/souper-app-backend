@@ -41,7 +41,7 @@ admin.initializeApp({
 connectDB();
 
 app.get('/', (req, res) =>
-    res.json({ msg: 'Welcome to the souper heroes api' })
+  res.json({ msg: 'Welcome to the souper heroes api' })
 );
 
 // Define Routes
