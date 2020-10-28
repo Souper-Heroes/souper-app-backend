@@ -146,7 +146,8 @@ router.post(
       body('postcode', 'Postcode is required').not().isEmpty(),
       body('address', 'Address is required').not().isEmpty(),
       body('location', 'Location is required').not().isEmpty(),
-      body('availability', 'Availability is required').not().isEmpty()
+      body('availability', 'Availability is required').not().isEmpty(),
+      body('image')
     ]
   ],
   async (req, res) => {
@@ -164,7 +165,8 @@ router.post(
       postcode,
       address,
       location,
-      availability
+      availability,
+      image
     } = req.body;
 
     try {
@@ -178,7 +180,8 @@ router.post(
         postcode,
         address,
         location,
-        availability
+        availability,
+        image
       });
 
       const item = await newItem.save();
@@ -203,7 +206,8 @@ router.put('/:id', auth, async (req, res) => {
     address,
     category,
     availability,
-    title
+    title,
+    image
   } = req.body;
 
   // build contact object
@@ -216,6 +220,7 @@ router.put('/:id', auth, async (req, res) => {
   if (category) itemFields.category = category;
   if (availability) itemFields.availability = availability;
   if (title) itemFields.title = title;
+  if (image) itemFields.image = image;
 
   // if (user_uid) itemFields.c_user_uid = user_uid;
 
