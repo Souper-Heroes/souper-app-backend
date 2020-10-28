@@ -7,6 +7,19 @@ import admin from 'firebase-admin';
 import dotEnv from 'dotenv';
 dotEnv.config();
 
+const app = express();
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, PATCH, DELETE, OPTIONS');
+  next();
+});
+
+// Init Middleware
+app.use(cors());
+app.use(express.json({ extended: false, limit: '50mb' }));
+
 const {
   FIREBASE_PROJECT_ID,
   FIREBASE_PRIVATE_KEY,
@@ -24,17 +37,11 @@ admin.initializeApp({
   databaseURL: FIREBASE_DATABASE_URL
 });
 
-const app = express();
-
 // Connect Database
 connectDB();
 
-// Init Middleware
-app.use(cors());
-app.use(express.json({ extended: false, limit: '50mb' }));
-
 app.get('/', (req, res) =>
-  res.json({ msg: 'Welcome to the souper heroes api' })
+    res.json({ msg: 'Welcome to the souper heroes api' })
 );
 
 // Define Routes
