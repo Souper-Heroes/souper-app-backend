@@ -10,6 +10,10 @@ const ItemSchema = mongoose.Schema({
     type: String,
     ref: 'users',
   },
+  image: {
+    type: String,
+    required: false,
+  },
   title: {
     type: String,
     required: true,
