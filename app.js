@@ -9,17 +9,16 @@ dotEnv.config();
 
 const app = express();
 
+app.use(cors());
+app.use(express.json({ extended: false, limit: '50mb' }));
+
 const {
   FIREBASE_PROJECT_ID,
   FIREBASE_PRIVATE_KEY,
   FIREBASE_CLIENT_EMAIL,
   FIREBASE_DATABASE_URL,
-  PORT = "5000",
-  USE_CORS = false
+  PORT = "5000"
 } = process.env;
-
-if (USE_CORS) app.use(cors());
-app.use(express.json({ extended: false, limit: '50mb' }));
 
 admin.initializeApp({
   credential: admin.credential.cert({
