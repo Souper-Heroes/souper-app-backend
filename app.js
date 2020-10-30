@@ -9,14 +9,6 @@ dotEnv.config();
 
 const app = express();
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, PATCH, DELETE, OPTIONS');
-  next();
-});
-
-// Init Middleware
 app.use(cors());
 app.use(express.json({ extended: false, limit: '50mb' }));
 
@@ -25,13 +17,13 @@ const {
   FIREBASE_PRIVATE_KEY,
   FIREBASE_CLIENT_EMAIL,
   FIREBASE_DATABASE_URL,
-  PORT = 5000
+  PORT = "5000"
 } = process.env;
 
 admin.initializeApp({
   credential: admin.credential.cert({
     project_id: FIREBASE_PROJECT_ID,
-    private_key: FIREBASE_PRIVATE_KEY,
+    private_key: FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
     client_email: FIREBASE_CLIENT_EMAIL
   }),
   databaseURL: FIREBASE_DATABASE_URL

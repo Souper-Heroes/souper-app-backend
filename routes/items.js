@@ -40,7 +40,7 @@ router.get('/search', auth, async (req, res) => {
   } = req.query;
 
   try {
-    const query = { c_user_uid: null };
+    const query = { c_user_uid: null, user_uid: { $ne: req.user.uid } };
     category && category.length ? (query.category = { $in: category }) : '';
     expiry && expiry.length ? (query.expiry = { $gte: new Date(expiry) }) : '';
     const skipDocuments = (page - 1) * limit;
@@ -144,6 +144,7 @@ router.post(
       body('category'),
       body('expiry', 'Expiry is required').not().isEmpty(),
       body('postcode', 'Postcode is required').not().isEmpty(),
+      body('address', 'Address is required').not().isEmpty(),
       body('location', 'Location is required').not().isEmpty(),
       body('availability', 'Availability is required').not().isEmpty()
     ]
@@ -161,6 +162,7 @@ router.post(
       category,
       expiry,
       postcode,
+      address,
       location,
       availability
     } = req.body;
@@ -174,6 +176,7 @@ router.post(
         category,
         expiry,
         postcode,
+        address,
         location,
         availability
       });
@@ -197,6 +200,7 @@ router.put('/:id', auth, async (req, res) => {
     expiry,
     c_user_uid,
     postcode,
+    address,
     category,
     availability,
     title
@@ -208,6 +212,7 @@ router.put('/:id', auth, async (req, res) => {
   if (expiry) itemFields.expiry = expiry;
   if (c_user_uid) itemFields.c_user_uid = c_user_uid;
   if (postcode) itemFields.postcode = postcode;
+  if (address) itemFields.address = address;
   if (category) itemFields.category = category;
   if (availability) itemFields.availability = availability;
   if (title) itemFields.title = title;
